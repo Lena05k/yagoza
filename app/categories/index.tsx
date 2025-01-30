@@ -1,14 +1,22 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
-import { categoriesData } from "@/data/categoriesData";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { categoriesData, Category } from "@/data/categoriesData";
 
 export default function Index() {
     const router = useRouter();
     const [expandedCategories, setExpandedCategories] = useState<{ [key: string]: boolean }>({});
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [indexMap, setIndexMap] = useState<Map<string, string>>(new Map());
+    const params = useLocalSearchParams();
+    console.log("Params:", params);
+
+    const category = params.category ?? "viewAll";  // Если `category` нет, используем `viewAll`
+    const categoryKey = Array.isArray(category) ? category[0].toLowerCase() : category.toLowerCase();
+
+    console.log("categoryKey:", categoryKey);
+    console.log("categoriesData keys:", Object.keys(categoriesData));
 
     useEffect(() => {
         const newIndexMap = new Map<string, string>();
@@ -78,7 +86,15 @@ export default function Index() {
                                 : category.subcategories.slice(0, 2);
 
                             return (
-                                <View key={key} style={styles.categoryWrapper}>
+                                <TouchableOpacity
+                                    key={key}
+                                    style={styles.categoryWrapper}
+                                    onPress={() => {
+                                        if (key !== "viewAll") {
+                                            router.push(`/categories/${key}`);
+                                        }
+                                    }}
+                                >
                                     <View>
                                         <View style={styles.iconContainer}>
                                             <Image
@@ -108,7 +124,7 @@ export default function Index() {
                                             )}
                                         </View>
                                     </View>
-                                </View>
+                                </TouchableOpacity>
                             );
                         })}
                     </View>

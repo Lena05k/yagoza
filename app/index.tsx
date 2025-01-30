@@ -4,8 +4,6 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { categoriesData } from "@/data/categoriesData";
 
-// console.log("categoriesData:", categoriesData);
-
 export default function Index() {
     const router = useRouter();
 

@@ -1,10 +1,10 @@
-interface Subcategory {
+export interface Subcategory {
     id: string;
     name: string;
     description?: string;
 }
 
-interface Category {
+export interface Category {
     icon: any;
     name: string;
     description: string;
