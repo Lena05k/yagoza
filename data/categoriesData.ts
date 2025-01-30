@@ -13,16 +13,23 @@ export interface Category {
 
 export const categoriesData: Record<string, Category> = {
     coffee: {
-        icon:  require("../assets/icons/coffee.png"),
+        icon: require("../assets/icons/coffee.png"),
         name: "Кофе",
         description: "Все в 'Sinka Kafe'",
         subcategories: [
-            { id: "americano", name: "Американо", description: "Кофе 'ARY'" },
-            { id: "cappuccino", name: "Капучино", description: "Сироп, взбитое молоко" },
-            { id: "latte", name: "Латте", description: "Сироп, взбитое молоко" },
-            { id: "espresso", name: "Эспрессо", description: "Классический эспрессо" },
+            { id: "americano", img: require("../assets/images/coffe/image9.png"), name: "Американо", description: [{ name: "Кофе 'ARY'", currentAmount: 300, totalAmount: 1000, unit: "мл" }] },
+            { id: "cappuccino", img: require("../assets/images/coffe/image8.png"), name: "Капучино", description: [
+                    { name: "Сироп", currentAmount: 500, totalAmount: 2000, unit: "мл" },
+                    { name: "Взбитое молоко", currentAmount: 10, totalAmount: 12, unit: "л" }
+                ]},
+            { id: "latte", img: require("../assets/images/coffe/image8.png"), name: "Латте", description: [
+                    { name: "Сироп", currentAmount: 400, totalAmount: 1500, unit: "мл" },
+                    { name: "Взбитое молоко", currentAmount: 5, totalAmount: 10, unit: "л" }
+                ]},
+            { id: "espresso", img: require("../assets/images/coffe/image8.png"), name: "Эспрессо", description: [{ name: "Классический эспрессо", currentAmount: 100, totalAmount: 500, unit: "мл" }] },
         ],
     },
+
     bakery: {
         icon: require("../assets/icons/bakery.png"),
         name: "Выпечка",

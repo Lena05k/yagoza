@@ -10,13 +10,13 @@ export default function Index() {
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [indexMap, setIndexMap] = useState<Map<string, string>>(new Map());
     const params = useLocalSearchParams();
-    console.log("Params:", params);
+    // console.log("Params:", params);
 
     const category = params.category ?? "viewAll";  // Если `category` нет, используем `viewAll`
     const categoryKey = Array.isArray(category) ? category[0].toLowerCase() : category.toLowerCase();
 
-    console.log("categoryKey:", categoryKey);
-    console.log("categoriesData keys:", Object.keys(categoriesData));
+    // console.log("categoryKey:", categoryKey);
+    // console.log("categoriesData keys:", Object.keys(categoriesData));
 
     useEffect(() => {
         const newIndexMap = new Map<string, string>();
@@ -112,7 +112,7 @@ export default function Index() {
                                         <View>
                                             {visibleSubcategories.map((subcategory) => (
                                                 <Text key={subcategory.id} style={[isExpanded ? styles.expandedSubcategoryText : styles.collapsedSubcategoryText]}>
-                                                    {subcategory.name}
+                                                    • {subcategory.name}
                                                 </Text>
                                             ))}
                                             {category.subcategories.length > 2 && (
