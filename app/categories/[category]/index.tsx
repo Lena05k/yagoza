@@ -50,7 +50,6 @@ export default function CategoryPage() {
                     {/* Заголовок */}
                     <View style={styles.headerContainer}>
                         <Text style={styles.headerTitle}>{selectedCategory.name}</Text>
-                        <Text style={styles.subTitle}>{selectedCategory.description}</Text>
                     </View>
 
                     {/* Поле поиска */}
@@ -92,16 +91,16 @@ export default function CategoryPage() {
                                             {/* Описание как список с количеством */}
                                             <View>
                                                 {descriptionArray.map((desc, index) => (
-                                                    <View key={index} style={styles.descriptionItem}>
+                                                    <View key={index} >
                                                         {/* Название ингредиента */}
-                                                        <Text style={styles.ingredientName}>
-                                                            • {desc.name}
+                                                        <Text style={[isExpanded ? styles.expandedSubcategoryText : styles.collapsedSubcategoryText]}>
+                                                            • {desc?.name}
                                                         </Text>
 
                                                         {/* Количество отображается только если категория раскрыта */}
                                                         {isExpanded && (
                                                             <Text style={styles.ingredientAmount}>
-                                                                {desc.currentAmount} {desc.unit} из {desc.totalAmount} {desc.unit}
+                                                                {desc?.currentAmount} {desc?.unit} из {desc?.totalAmount} {desc?.unit}
                                                             </Text>
                                                         )}
                                                     </View>
@@ -119,7 +118,7 @@ export default function CategoryPage() {
                                 );
                             })
                         ) : (
-                            <Text style={styles.noResultsText}>Подкатегории не найдены</Text>
+                            <Text style={styles.expandedSubcategoryText}>Подкатегории не найдены</Text>
                         )}
                     </View>
                 </View>

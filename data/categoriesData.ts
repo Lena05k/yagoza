@@ -1,11 +1,19 @@
+export interface Ingredient {
+    name: string;
+    currentAmount: number;
+    totalAmount: number;
+    unit: string;
+}
+
 export interface Subcategory {
     id: string;
+    img: string;
     name: string;
-    description?: string;
+    description?: Ingredient[];
 }
 
 export interface Category {
-    icon: any;
+    icon: string;
     name: string;
     description: string;
     subcategories: Subcategory[];
@@ -35,18 +43,22 @@ export const categoriesData: Record<string, Category> = {
         name: "Выпечка",
         description: "Среди всех заведений",
         subcategories: [
-            { id: "croissant", name: "Круассан сливочный", description: "Со сливочным кремом" },
-            { id: "chocolate", name: "Круассан с шоколадом", description: "С начинкой из шоколада" },
-        ],
+            { id: "croissant", img: require("../assets/images/coffe/image9.png"), name: "Круассан сливочный", description: [{ name: "Со сливочным кремом", currentAmount: 50, totalAmount: 200, unit: "шт" }] },
+            { id: "chocolate", img: require("../assets/images/coffe/image9.png"), name: "Круассан с шоколадом", description: [{ name: "С начинкой из шоколада", currentAmount: 40, totalAmount: 180, unit: "шт" }] },
+            { id: "danish", img: require("../assets/images/coffe/image9.png"), name: "Датская булочка", description: [{ name: "С вишневым джемом", currentAmount: 30, totalAmount: 100, unit: "шт" }] },
+            { id: "muffin", img: require("../assets/images/coffe/image9.png"), name: "Маффин", description: [{ name: "С черникой", currentAmount: 20, totalAmount: 90, unit: "шт" }] }
+        ]
     },
     syrups: {
         icon: require("../assets/icons/syrups.png"),
         name: "Сиропы",
         description: "Среди всех заведений",
         subcategories: [
-            { id: "vanilla", name: "Ванильный сироп", description: "Herbarista Bourbon Vanilla" },
-            { id: "caramel", name: "Карамельный сироп", description: "Herbarista Bourbon Caramel" },
-        ],
+            { id: "vanilla", img: require("../assets/images/coffe/image9.png"), name: "Ванильный сироп", description: [{ name: "Herbarista Bourbon Vanilla", currentAmount: 600, totalAmount: 2500, unit: "мл" }] },
+            { id: "caramel", img: require("../assets/images/coffe/image9.png"), name: "Карамельный сироп", description: [{ name: "Herbarista Bourbon Caramel", currentAmount: 500, totalAmount: 2200, unit: "мл" }] },
+            { id: "hazelnut", img: require("../assets/images/coffe/image9.png"), name: "Ореховый сироп", description: [{ name: "Herbarista Hazelnut", currentAmount: 450, totalAmount: 2000, unit: "мл" }] },
+            { id: "chocolate", img: require("../assets/images/coffe/image9.png"), name: "Шоколадный сироп", description: [{ name: "Herbarista Chocolate", currentAmount: 700, totalAmount: 2800, unit: "мл" }] }
+        ]
     },
     viewAll: {
         icon: "",
