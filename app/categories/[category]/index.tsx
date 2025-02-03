@@ -57,7 +57,7 @@ export default function CategoryPage() {
                     <View style={styles.searchContainer}>
                         <TextInput
                             style={styles.searchInput}
-                            placeholder="Поиск подкатегорий"
+                            placeholder="Поиск"
                             value={searchQuery}
                             onChangeText={setSearchQuery}
                         />
