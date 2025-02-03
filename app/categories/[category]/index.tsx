@@ -50,6 +50,7 @@ export default function CategoryPage() {
                     {/* Заголовок */}
                     <View style={styles.headerContainer}>
                         <Text style={styles.headerTitle}>{selectedCategory.name}</Text>
+                        <Text style={styles.subTitle}>{selectedCategory.description}</Text>
                     </View>
 
                     {/* Поле поиска */}
@@ -75,9 +76,9 @@ export default function CategoryPage() {
                                         style={styles.categoryWrapper}
                                         onPress={() => {
                                             if (sub.id) {
-                                                router.push(`/categories/${sub.id}`);
+                                                router.push(`/categories/${categoryKey}/${sub.id}`);
                                             } else {
-                                                console.warn("Ошибка: у подкатегории нет ID");
+                                                console.warn("Ошибка: у подкатегории нет ID", sub);
                                             }
                                         }}
                                     >
@@ -91,8 +92,7 @@ export default function CategoryPage() {
                                             {/* Описание как список с количеством */}
                                             <View>
                                                 {descriptionArray.map((desc, index) => (
-                                                    <View key={index} >
-                                                        {/* Название ингредиента */}
+                                                    <View key={index}>
                                                         <Text style={[isExpanded ? styles.expandedSubcategoryText : styles.collapsedSubcategoryText]}>
                                                             • {desc?.name}
                                                         </Text>
@@ -118,7 +118,7 @@ export default function CategoryPage() {
                                 );
                             })
                         ) : (
-                            <Text style={styles.expandedSubcategoryText}>Подкатегории не найдены</Text>
+                            <Text>Подкатегории не найдены</Text>
                         )}
                     </View>
                 </View>
