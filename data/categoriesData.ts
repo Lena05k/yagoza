@@ -27,23 +27,23 @@ export const categoriesData: Record<string, Category> = {
         name: "Кофе",
         description: "Все в 'Sinka Kafe'",
         subcategories: [
-            { id: "americano", img: require("../assets/images/coffe/image9.png"), name: "Американо", description: [
-                { id: "A001", img: require("../assets/images/coffe/image9.png"),  name: "Кофе 'ARY'", currentAmount: 300, totalAmount: 1000, unit: "мл" }
+            { id: "americano", img: require("../assets/images/coffe/americano.png"), name: "Американо", description: [
+                { id: "A001", img: require("../assets/images/products/coffe_8.png"),  name: "Кофе 'ARY'", currentAmount: 300, totalAmount: 1000, unit: "мл" }
                 ]},
-            { id: "cappuccino", img: require("../assets/images/coffe/image.png"), name: "Капучино", description: [
-                    { id: "C001", img: require("../assets/images/coffe/image.png"), name: "Сироп", currentAmount: 500, totalAmount: 2000, unit: "мл" },
-                    { id: "C002", img: require("../assets/images/coffe/image.png"), name: "Взбитое молоко", currentAmount: 10, totalAmount: 12, unit: "л" }
+            { id: "cappuccino", img: require("../assets/images/coffe/cappuccino.png"), name: "Капучино", description: [
+                    { id: "C001", img: require("../assets/images/products/syrup.png"), name: "Сироп", currentAmount: 500, totalAmount: 2000, unit: "мл" },
+                    { id: "C002", img: require("../assets/images/products/milk.png"), name: "Взбитое молоко", currentAmount: 10, totalAmount: 12, unit: "л" }
                 ]},
-            { id: "raf", img: require("../assets/images/coffe/image9.png"), name: "Раф", description: [
-                    { id: "K001", img: require("../assets/images/products/coffe.png"), name: "Кофе “Смесь №8”", currentAmount: 400, totalAmount: 1500, unit: "мл" },
+            { id: "raf", img: require("../assets/images/coffe/raf.png"), name: "Раф", description: [
+                    { id: "K001", img: require("../assets/images/products/coffe_8.png"), name: "Кофе “Смесь №8”", currentAmount: 400, totalAmount: 1500, unit: "мл" },
                     { id: "K002", img: require("../assets/images/products/cream.png"), name: "Сливки «Milkavita» Latte Barista,ультрапастери...", currentAmount: 5, totalAmount: 10, unit: "л" }
                 ]},
-            { id: "latte", img: require("../assets/images/coffe/image8.png"), name: "Латте", description: [
-                    { id: "L001", img: require("../assets/images/coffe/image9.png"), name: "Сироп", currentAmount: 400, totalAmount: 1500, unit: "мл" },
-                    { id: "L002", img: require("../assets/images/coffe/image9.png"), name: "Взбитое молоко", currentAmount: 5, totalAmount: 10, unit: "л" }
+            { id: "latte", img: require("../assets/images/coffe/latte.png"), name: "Латте", description: [
+                    { id: "L001", img: require("../assets/images/products/syrup.png"), name: "Сироп", currentAmount: 400, totalAmount: 1500, unit: "мл" },
+                    { id: "L002", img: require("../assets/images/products/milk.png"), name: "Взбитое молоко", currentAmount: 5, totalAmount: 10, unit: "л" }
                 ]},
-            { id: "espresso", img: require("../assets/images/coffe/image9.png"), name: "Эспрессо", description: [
-                { id: "E001", img: require("../assets/images/coffe/image9.png"), name: "Классический эспрессо", currentAmount: 100, totalAmount: 500, unit: "мл" }
+            { id: "espresso", img: require("../assets/images/coffe/espresso.png"), name: "Эспрессо", description: [
+                { id: "E001", img: require("../assets/images/products/coffe_8.png"), name: "Классический эспрессо", currentAmount: 100, totalAmount: 500, unit: "мл" }
                 ]},
         ]
     },

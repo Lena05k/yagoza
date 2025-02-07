@@ -10,12 +10,8 @@ export default function CategoryPage() {
     const { category, subcategory } = useLocalSearchParams();
     const [searchQuery, setSearchQuery] = useState<string>("");
 
-    console.log("subcategoryKey:", subcategory);
-
     const selectedCategory = categoriesData[category as string];
     const selectedSubcategory = selectedCategory?.subcategories.find(sub => sub.id === subcategory);
-
-    console.log("selectedSubcategory:", selectedSubcategory);
 
     const filteredItems = useMemo(() => {
         if (!selectedSubcategory || !Array.isArray(selectedSubcategory.description)) return [];

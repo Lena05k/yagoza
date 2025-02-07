@@ -1,15 +1,19 @@
-import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState } from 'react';
+import { FlatList, ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import { categoriesData } from "@/data/categoriesData";
+import NoteSection from "@/components/NotesDiscussions";
+import DiscussionSection from "@/components/DiscussionSection";
 import ProgressBar from "@/components/ProgressBar";
+import { Discussion } from "@/components/DiscussionSection";
+import { Note } from "@/components/NotesDiscussions";
 
 export default function DescriptionPage() {
     const params = useLocalSearchParams();
     const { category, subcategory, item } = params;
-
-    console.log('params:', params);
+    const [note, setNote] = useState<Note[]>([]);
+    const [discussions, setDiscussions] = useState<Discussion[]>([]);
 
     const selectedCategory = categoriesData[category as string];
     const selectedSubcategory = selectedCategory?.subcategories.find(sub => sub.id === subcategory);
@@ -20,7 +24,13 @@ export default function DescriptionPage() {
         })
         : undefined;
 
-    console.log("selectedCategory:", selectedDescription);
+    const handleAddNote = (newNote: string) => {
+        setNote(([...note, { id: Date.now().toString(), newNote }]));
+    };
+
+    const handleAddDiscussion = (text: string) => {
+        setDiscussions([...discussions, { id: Date.now().toString(), text }]);
+    };
 
     if (!selectedDescription) {
         return (
@@ -32,41 +42,61 @@ export default function DescriptionPage() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.header}>{selectedDescription.name}</Text>
-            <View style={styles.imageContainer}>
-                <Image source={selectedDescription.img} style={styles.productImage} />
-            </View>
-            <View>
-                <Text style={styles.collTitle}>Колличество</Text>
-                <View style={styles.progressContainer}>
-                    <ProgressBar
-                        progress={selectedDescription.currentAmount / selectedDescription.totalAmount * 100}
-                    />
-                    <View style={styles.weightContainer}>
-                        <View style={styles.remainingWeight}>
-                            <Text style={styles.weightText}>
-                                {selectedDescription.currentAmount}  {selectedDescription.unit}
-                            </Text>
-                            <Text style={styles.labelText}>Осталось</Text>
-                        </View>
-                        <View style={styles.totalWeight}>
-                            <Text style={styles.weightText}>
-                                {selectedDescription.totalAmount} {selectedDescription.unit}
-                            </Text>
-                            <Text style={styles.labelText}>Всего</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.usageContainer}>
-                        <Text style={styles.usageText}>За сутки </Text>
-                        <Text style={styles.usageText}>За 7 дней </Text>
-                    </View>
-                </View>
-
-            </View>
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Изменить количество</Text>
-            </TouchableOpacity>
+            <KeyboardAvoidingView
+                behavior="padding"
+                style={{ flex: 1 }} // Растягиваем на весь экран
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+            >
+                <FlatList
+                    ListHeaderComponent={
+                        <>
+                            <Text style={styles.header}>{selectedDescription.name}</Text>
+                            <View style={styles.imageContainer}>
+                                <Image source={selectedDescription.img} style={styles.productImage} />
+                            </View>
+                            <View>
+                                <Text style={styles.collTitle}>Количество</Text>
+                                <View style={styles.progressContainer}>
+                                    <ProgressBar
+                                        progress={selectedDescription.currentAmount / selectedDescription.totalAmount * 100}
+                                    />
+                                    <View style={styles.weightContainer}>
+                                        <View style={styles.remainingWeight}>
+                                            <Text style={styles.weightText}>
+                                                {selectedDescription.currentAmount}  {selectedDescription.unit}
+                                            </Text>
+                                            <Text style={styles.labelText}>Осталось</Text>
+                                        </View>
+                                        <View style={styles.totalWeight}>
+                                            <Text style={styles.weightText}>
+                                                {selectedDescription.totalAmount} {selectedDescription.unit}
+                                            </Text>
+                                            <Text style={styles.labelText}>Всего</Text>
+                                        </View>
+                                    </View>
+                                    <View style={styles.usageContainer}>
+                                        <Text style={styles.usageText}>За сутки </Text>
+                                        <Text style={styles.usageText}>За 7 дней </Text>
+                                    </View>
+                                </View>
+                                <TouchableOpacity style={styles.button}>
+                                    <Text style={styles.buttonText}>Изменить количество</Text>
+                                </TouchableOpacity>
+                                <View>
+                                    <NoteSection note={note} onAddNote={handleAddNote} />
+                                    <DiscussionSection discussions={discussions} onAddDiscussion={handleAddDiscussion} />
+                                </View>
+                            </View>
+                            <TouchableOpacity style={styles.buttonDelete}>
+                                <Text style={styles.buttonTextDelete}>Удалить карточку</Text>
+                            </TouchableOpacity>
+                        </>
+                    }
+                    data={[]}
+                    keyExtractor={() => "dummy"}
+                    showsVerticalScrollIndicator={false}
+                />
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
@@ -90,5 +120,7 @@ const styles = StyleSheet.create({
     usageContainer: { marginTop: 16 },
     usageText: { fontSize: 16, color: "#000", fontWeight: 400, textAlign: "left", marginVertical: 2 },
     button: { backgroundColor: "#3E7DFE", padding: 12, borderRadius: 12, marginTop: 16, alignItems: "center" },
-    buttonText: { color: "#fff", fontSize: 20, fontWeight: 700 }
+    buttonText: { color: "#fff", fontSize: 20, fontWeight: 700 },
+    buttonDelete: { backgroundColor: "#EFEFF0", padding: 12, borderRadius: 12, marginTop: 16, alignItems: "center" },
+    buttonTextDelete: { color: "#FF4747", fontSize: 20, fontWeight: 700 },
 });
