@@ -1,7 +1,17 @@
+import { ImageSourcePropType } from "react-native";
 export interface Ingredient {
     id: string;
-    img: string;
+    img: ImageSourcePropType;
     name: string;
+    currentAmount: number;
+    totalAmount: number;
+    unit: string;
+}
+
+export interface Item {
+    id: string;
+    name: string;
+    img: ImageSourcePropType;
     currentAmount: number;
     totalAmount: number;
     unit: string;
@@ -9,20 +19,20 @@ export interface Ingredient {
 
 export interface Subcategory {
     id: string;
-    img: string;
+    img: ImageSourcePropType;
     name: string;
     description?: Ingredient[];
 }
 
 export interface Category {
-    icon: string;
+    icon: ImageSourcePropType;
     name: string;
     description: string;
     subcategories: Subcategory[];
 }
 
 export const categoriesData: Record<string, Category> = {
-    coffee: {
+    "coffee": {
         icon: require("../assets/icons/coffee.png"),
         name: "Кофе",
         description: "Все в 'Sinka Kafe'",
@@ -47,7 +57,7 @@ export const categoriesData: Record<string, Category> = {
                 ]},
         ]
     },
-    bakery: {
+    "bakery": {
         icon: require("../assets/icons/bakery.png"),
         name: "Выпечка",
         description: "Среди всех заведений",
@@ -66,7 +76,7 @@ export const categoriesData: Record<string, Category> = {
                 ]}
         ]
     },
-    syrups: {
+    "syrups": {
         icon: require("../assets/icons/syrups.png"),
         name: "Сиропы",
         description: "Среди всех заведений",
@@ -85,7 +95,7 @@ export const categoriesData: Record<string, Category> = {
                 ]}
         ]
     },
-    viewAll: {
+    "viewAll": {
         icon: "",
         name: "Смотреть все",
         description: "",

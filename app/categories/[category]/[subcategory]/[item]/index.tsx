@@ -44,7 +44,7 @@ export default function DescriptionPage() {
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView
                 behavior="padding"
-                style={{ flex: 1 }} // Растягиваем на весь экран
+                style={{ flex: 1 }}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
             >
                 <FlatList
@@ -123,4 +123,5 @@ const styles = StyleSheet.create({
     buttonText: { color: "#fff", fontSize: 20, fontWeight: 700 },
     buttonDelete: { backgroundColor: "#EFEFF0", padding: 12, borderRadius: 12, marginTop: 16, alignItems: "center" },
     buttonTextDelete: { color: "#FF4747", fontSize: 20, fontWeight: 700 },
+    errorText: {fontSize: 18, color: "red", textAlign: "center",},
 });

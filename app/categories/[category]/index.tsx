@@ -3,9 +3,10 @@ import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Image} 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { categoriesData, Category, Subcategory } from "@/data/categoriesData";
+import SubcategoryList from "@/components/forCategory/SubcategoryList";
 
 export default function CategoryPage() {
-    const [expandedCategories, setExpandedCategories] = useState<{ [key: string]: boolean }>({});
+    const [expandedSubcategories, setExpandedSubcategories] = useState<{ [key: string]: boolean }>({});
     const [searchQuery, setSearchQuery] = useState<string>("");
     const { category } = useLocalSearchParams();
     const router = useRouter();
@@ -23,13 +24,15 @@ export default function CategoryPage() {
         return subcategories.filter(sub =>
             sub.name.toLowerCase().includes(query) ||
             (Array.isArray(sub.description)
-                ? sub.description.some(desc => desc.name.toLowerCase().includes(query))
-                : sub.description?.name.toLowerCase().includes(query))
+                ? sub.description.some(desc => desc?.name                                          .toLowerCase().includes(query))
+                : sub.description?.name?.toLowerCase()?.includes(query))
         );
     }, [searchQuery, selectedCategory]);
 
-    const toggleCategory = (id: string) => {
-        setExpandedCategories((prev) => ({
+
+
+    const toggleSubcategory = (id: string) => {
+        setExpandedSubcategories((prev) => ({
             ...prev,
             [id]: !prev[id],
         }));
@@ -47,13 +50,10 @@ export default function CategoryPage() {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.innerContainer}>
-                    {/* Заголовок */}
                     <View style={styles.headerContainer}>
                         <Text style={styles.headerTitle}>{selectedCategory.name}</Text>
                         <Text style={styles.subTitle}>{selectedCategory.description}</Text>
                     </View>
-
-                    {/* Поле поиска */}
                     <View style={styles.searchContainer}>
                         <TextInput
                             style={styles.searchInput}
@@ -62,59 +62,24 @@ export default function CategoryPage() {
                             onChangeText={setSearchQuery}
                         />
                     </View>
-
-                    {/* Список подкатегорий */}
                     <View style={styles.categoriesContainer}>
                         {filteredSubcategories.length > 0 ? (
                             filteredSubcategories.map((sub: Subcategory) => {
-                                const isExpanded = expandedCategories[sub.id] || false;
-                                const descriptionArray = Array.isArray(sub.description) ? sub.description : [sub.description];
-
                                 return (
-                                    <TouchableOpacity
-                                        key={sub.id || sub.name}
-                                        style={styles.categoryWrapper}
+                                    <SubcategoryList
+                                        key={sub.id}
+                                        id={sub.id}
+                                        subcategory={sub}
+                                        isExpanded={expandedSubcategories[sub.id]}
+                                        toggleCategory={() => toggleSubcategory(sub.id)}
                                         onPress={() => {
-                                            if (sub.id) {
-                                                router.push(`/categories/${categoryKey}/${sub.id}`);
+                                            if (category && sub.id) {
+                                                router.push(`/categories/${category}/${sub.id}`);
                                             } else {
-                                                console.warn("Ошибка: у подкатегории нет ID", sub);
+                                                console.error("Ошибка: недостаточно данных для перехода");
                                             }
                                         }}
-                                    >
-                                        <View style={styles.iconContainer}>
-                                            <Image source={sub.img} style={styles.categoryIcon} />
-                                        </View>
-
-                                        <View style={styles.subcategoriesContainer}>
-                                            <Text style={styles.categoryTitle}>{sub.name}</Text>
-
-                                            {/* Описание как список с количеством */}
-                                            <View>
-                                                {descriptionArray.map((desc, index) => (
-                                                    <View key={index}>
-                                                        <Text style={[isExpanded ? styles.expandedSubcategoryText : styles.collapsedSubcategoryText]}>
-                                                            • {desc?.name}
-                                                        </Text>
-
-                                                        {/* Количество отображается только если категория раскрыта */}
-                                                        {isExpanded && (
-                                                            <Text style={styles.ingredientAmount}>
-                                                                {desc?.currentAmount} {desc?.unit} из {desc?.totalAmount} {desc?.unit}
-                                                            </Text>
-                                                        )}
-                                                    </View>
-                                                ))}
-                                            </View>
-
-                                            {/* Кнопка "Еще X / Свернуть" */}
-                                            <TouchableOpacity onPress={() => toggleCategory(sub.id)}>
-                                                <Text style={styles.viewMoreText}>
-                                                    {isExpanded ? "Свернуть" : "Еще"}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </TouchableOpacity>
+                                    />
                                 );
                             })
                         ) : (
@@ -133,42 +98,13 @@ const styles = StyleSheet.create({
     headerContainer: { marginBottom: 12, alignItems: "center" },
     headerTitle: { fontSize: 24, fontWeight: "bold" },
     subTitle: { fontSize: 16, color: "#777", marginTop: 4 },
-    searchContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: "#f1f1f1",
-        borderRadius: 10,
-        paddingHorizontal: 10,
-        height: 40,
-        marginVertical: 7,
-    },
-    searchInput: {
-        flex: 1,
-        fontSize: 17,
-        fontWeight: "400",
-        textAlign: "center",
-        color: "#3C3C4399",
-    },
+    searchContainer: {flexDirection: "row", alignItems: "center", backgroundColor: "#f1f1f1", borderRadius: 10, paddingHorizontal: 10, height: 40, marginVertical: 7,},
+    searchInput: {flex: 1, fontSize: 17, fontWeight: "400", textAlign: "center", color: "#3C3C4399",},
     categoriesContainer: { marginTop: 16 },
-    categoryWrapper: {
-        position: "relative",
-        flexDirection: "row",
-        backgroundColor: "#fff",
-        marginBottom: 12,
-        borderRadius: 8,
-        shadowColor: "#000",
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        shadowOffset: { width: 0, height: 2 },
-    },
+    categoryWrapper: {position: "relative", flexDirection: "row", backgroundColor: "#fff", marginBottom: 12, borderRadius: 8, shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 4, shadowOffset: { width: 0, height: 2 },},
     categoryHeader: { alignItems: "center" },
-    iconContainer: {
-        flexDirection: "column",
-        borderRadius: 8,
-    },
+    iconContainer: {flexDirection: "column", borderRadius: 8,},
     categoryIcon: { width: 40, height: 40 },
-    // categoryContent: { flex: 1 },
-    // subcategory: { flex: 1 },
     categoryTitle: { fontSize: 18, fontWeight: "bold" },
     categoryDescription: { fontSize: 16, color: "#000000" },
     subcategoriesContainer: { backgroundColor: "#EFEFF0", borderRadius: 12, marginLeft: 8, padding: 12, flexGrow: 1 },
@@ -176,14 +112,6 @@ const styles = StyleSheet.create({
     collapsedSubcategoryText: { fontSize: 16, fontWeight: 500, color: "#919191", marginVertical: 4 },
     ingredientAmount: { fontSize: 16, fontWeight: 500, color: "#919191", marginVertical: 4, paddingLeft: 10 },
     viewMoreText: { fontSize: 16, fontWeight: 500, color: "#007AFF", marginTop: 8 },
-    errorContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    errorText: {
-        fontSize: 18,
-        color: "red",
-        textAlign: "center",
-    },
+    errorContainer: {flex: 1, justifyContent: "center", alignItems: "center",},
+    errorText: {fontSize: 18, color: "red", textAlign: "center",},
 });
