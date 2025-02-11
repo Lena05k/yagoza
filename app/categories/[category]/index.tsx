@@ -29,8 +29,6 @@ export default function CategoryPage() {
         );
     }, [searchQuery, selectedCategory]);
 
-
-
     const toggleSubcategory = (id: string) => {
         setExpandedSubcategories((prev) => ({
             ...prev,

@@ -1,43 +1,27 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { setSearchQuery } from '@/store/filters/filters-slice';
+import { selectFilteredCategories } from '@/store/filters/filters-selectors';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { categoriesData, Category } from "@/data/categoriesData";
 import CategoryList from "@/components/forCategory/CategoryList";
+import { setCategoriesData } from "@/store/categories/categories-slice";
 
 export default function Index() {
     const router = useRouter();
+    const dispatch = useDispatch();
     const [expandedCategories, setExpandedCategories] = useState<{ [key: string]: boolean }>({});
-    const [searchQuery, setSearchQuery] = useState<string>("");
-    const [indexMap, setIndexMap] = useState<Map<string, string>>(new Map());
-    const params = useLocalSearchParams();
-
-    const category = params.category ?? "viewAll";
-    const categoryKey = Array.isArray(category) ? category[0].toLowerCase() : category.toLowerCase();
+    const filteredCategories = useSelector(selectFilteredCategories);
 
     useEffect(() => {
-        const newIndexMap = new Map<string, string>();
-        Object.entries(categoriesData).forEach(([key, category]) => {
-            newIndexMap.set(category.name.toLowerCase(), key);
-            category.subcategories.forEach(subcategory => {
-                newIndexMap.set(subcategory.name.toLowerCase(), key);
-            });
-        });
-        setIndexMap(newIndexMap);
-    }, [categoriesData]);
+        dispatch(setCategoriesData(categoriesData));
+    }, [dispatch])
 
-    const filteredCategories = useMemo(() => {
-        if (!searchQuery) return Object.entries(categoriesData);
-        const query = searchQuery.toLowerCase();
-        const matchedKeys = new Set<string>();
-
-        for (const [name, key] of indexMap) {
-            if (name.includes(query)) {
-                matchedKeys.add(key);
-            }
-        }
-        return Object.entries(categoriesData).filter(([key]) => matchedKeys.has(key));
-    }, [searchQuery, indexMap]);
+    const handleSearchChange = (text: string) => {
+        dispatch(setSearchQuery(text));
+    };
 
     const toggleCategory = (key: string) => {
         setExpandedCategories((prev) => ({
@@ -56,6 +40,9 @@ export default function Index() {
         );
     }
 
+    console.log('categoriesData:', categoriesData);
+    console.log('filteredCategories:', filteredCategories);
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -69,8 +56,7 @@ export default function Index() {
                         <TextInput
                             style={styles.searchInput}
                             placeholder="Поиск"
-                            value={searchQuery}
-                            onChangeText={setSearchQuery}
+                            onChangeText={handleSearchChange}
                         />
                     </View>
                     <View style={styles.categoriesContainer}>
@@ -109,3 +95,34 @@ const styles = StyleSheet.create({
     errorText: {fontSize: 18, color: "red", textAlign: "center",},
 });
 
+
+// const category = params.category ?? "viewAll";
+// const categoryKey = Array.isArray(category) ? category[0].toLowerCase() : category.toLowerCase();
+
+// useEffect(() => {
+//     const newIndexMap = new Map<string, string>();
+//     Object.entries(categoriesData).forEach(([key, category]) => {
+//         newIndexMap.set(category.name.toLowerCase(), key);
+//         category.subcategories.forEach(subcategory => {
+//             newIndexMap.set(subcategory.name.toLowerCase(), key);
+//         });
+//     });
+//     setIndexMap(newIndexMap);
+// }, [categoriesData]);
+
+// const [searchQuery, setSearchQuery] = useState<string>("");
+// const [indexMap, setIndexMap] = useState<Map<string, string>>(new Map());
+// const params = useLocalSearchParams();
+
+// const filteredCategories = useMemo(() => {
+//     if (!searchQuery) return Object.entries(categoriesData);
+//     const query = searchQuery.toLowerCase();
+//     const matchedKeys = new Set<string>();
+//
+//     for (const [name, key] of indexMap) {
+//         if (name.includes(query)) {
+//             matchedKeys.add(key);
+//         }
+//     }
+//     return Object.entries(categoriesData).filter(([key]) => matchedKeys.has(key));
+// }, [searchQuery, indexMap]);

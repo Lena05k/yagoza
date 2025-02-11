@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { Provider } from "react-redux";
 import {SafeAreaView} from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { categoriesData } from "@/data/categoriesData";
@@ -17,11 +18,9 @@ export default function Index() {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.innerContainer}>
-                    {/* Header */}
                     <View style={styles.headerContainer}>
                         <Text style={styles.headerTitle}>Категории</Text>
                     </View>
-                    {/* Categories */}
                     <View style={styles.categoriesContainer}>
                         {groupedCategories.map((group, index) => (
                             <View key={index} style={styles.categoryRow}>
@@ -174,56 +173,3 @@ const styles = StyleSheet.create({
         color: '#6B7280',
     },
 });
-
-{/* Update Quantity */}
-{/*<View style={styles.updateContainer}>*/}
-{/*    <Text style={styles.updateTitle}>Обновить количество</Text>*/}
-{/*    <View style={styles.updateButtonsContainer}>*/}
-{/*        <TouchableOpacity style={styles.updateButtonPurple}>*/}
-{/*            /!*<DotsGridIcon width={16} height={16} color="purple" />*!/*/}
-{/*            <Text style={styles.updateButtonText}>Сканировать</Text>*/}
-{/*        </TouchableOpacity>*/}
-{/*        <TouchableOpacity style={styles.updateButtonBlue}>*/}
-{/*            /!*<Group11Icon width={16} height={16} color="blue" />*!/*/}
-{/*            <Text style={styles.updateButtonText}>В ручную</Text>*/}
-{/*        </TouchableOpacity>*/}
-{/*    </View>*/}
-{/*</View>*/}
-
-{/* Recent Updates */}
-{/*<View style={styles.recentUpdatesContainer}>*/}
-{/*    <View style={styles.recentUpdatesHeader}>*/}
-{/*        <Text style={styles.recentUpdatesTitle}>Последние обновления</Text>*/}
-{/*        <TouchableOpacity>*/}
-{/*            <Text style={styles.viewAll}>все</Text>*/}
-{/*        </TouchableOpacity>*/}
-{/*    </View>*/}
-{/*    <View>*/}
-{/*        <Text style={styles.recentUpdateItemTitle}>Кофе - Американо</Text>*/}
-{/*        <Text style={styles.recentUpdateItemSubtitle}>Herbarista Bourbon Vanilla...</Text>*/}
-{/*    </View>*/}
-{/*    <View style={styles.recentUpdateItemContainer}>*/}
-{/*        <Text style={styles.recentUpdateItemTitle}>Выпечка</Text>*/}
-{/*        <Text style={styles.recentUpdateItemSubtitle}>Круассан с шоколадом</Text>*/}
-{/*    </View>*/}
-{/*</View>*/}
-
-{/* Footer */}
-{/*<View style={styles.footerContainer}>*/}
-{/*    <TouchableOpacity>*/}
-{/*        /!*<NavigationIconsTsx width={16} height={16} fill="black" />*!/*/}
-{/*        <Text style={styles.footerText}>Главная</Text>*/}
-{/*    </TouchableOpacity>*/}
-{/*    <TouchableOpacity>*/}
-{/*        /!*<SecondIcon width={16} height={16} fill="black" />*!/*/}
-{/*        <Text style={styles.footerTextInactive}>Категории</Text>*/}
-{/*    </TouchableOpacity>*/}
-{/*    <TouchableOpacity>*/}
-{/*        /!*<FourthIcon width={16} height={16} fill="black" />*!/*/}
-{/*        <Text style={styles.footerTextInactive}>Обновить</Text>*/}
-{/*    </TouchableOpacity>*/}
-{/*    <TouchableOpacity>*/}
-{/*        /!*<ThirdIcon width={16} height={16} fill="black" />*!/*/}
-{/*        <Text style={styles.footerTextInactive}>Участники</Text>*/}
-{/*    </TouchableOpacity>*/}
-{/*</View>*/}

@@ -31,6 +31,21 @@ export interface Category {
     subcategories: Subcategory[];
 }
 
+interface FiltersState {
+    searchQuery: '',
+    selectedCategory: null,
+    selectedSubcategory: null,
+}
+
+interface CategoriesState {
+    data: Record<string, Category>;
+}
+
+export interface RootState {
+    filters: FiltersState;
+    categories: CategoriesState;
+}
+
 export const categoriesData: Record<string, Category> = {
     "coffee": {
         icon: require("../assets/icons/coffee.png"),

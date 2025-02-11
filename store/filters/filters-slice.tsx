@@ -1,6 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+interface FiltersState {
+    searchQuery: string;
+    selectedCategory: string | null;
+    selectedSubcategory: string | null;
+}
+
+const initialState: FiltersState = {
     searchQuery: '',
     selectedCategory: null,
     selectedSubcategory: null,
