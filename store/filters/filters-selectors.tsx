@@ -4,6 +4,8 @@ import { Category, Subcategory } from "@/data/categoriesData";
 
 const selectSearchQuery = (state: RootState) => state.filters.searchQuery;
 const selectCategoriesData = (state: RootState) => state.categories.data;
+const selectSelectedCategoryKey = (state: RootState) => state.filters.selectedCategory;
+const selectSelectedSubcategory = (state: RootState) => state.filters.selectedSubcategory;
 
 export const selectFilteredCategories = createSelector(
     [selectSearchQuery, selectCategoriesData],
@@ -39,25 +41,46 @@ export const selectFilteredCategories = createSelector(
     }
 );
 
-// const selectSelectedCategory = (state: RootState) => state.filters.selectedCategory;
-// const selectSelectedSubcategory = (state: RootState) => state.filters.selectedSubcategory;
+export const selectSelectedCategory = createSelector(
+    [selectCategoriesData, selectSelectedCategoryKey],
+    (categoriesData, selectedCategoryKey): Category | undefined => {
+        if (!categoriesData || !selectedCategoryKey) return undefined;
+        return categoriesData[selectedCategoryKey];
+    }
+);
 
-// export const selectFilteredSubcategories = createSelector(
-//     [selectSearchQuery, selectSelectedCategory],
-//     (searchQuery, selectedCategory): Subcategory[] => {
-//         if (!selectedCategory) return [];
-//         const subcategories = selectedCategory.subcategories || [];
-//         if (!searchQuery) return subcategories;
-//
-//         const query = searchQuery.toLowerCase();
-//         return subcategories.filter((sub) =>
-//             sub.name.toLowerCase().includes(query) ||
-//             (Array.isArray(sub.description)
-//                 ? sub.description.some((desc) => desc?.name?.toLowerCase()?.includes(query))
-//                 : sub.description?.name?.toLowerCase()?.includes(query))
-//         );
-//     }
-// );
+export const selectFilteredSubcategories = createSelector(
+    [selectSearchQuery, selectCategoriesData, selectSelectedCategoryKey],
+    (searchQuery, categoriesData, selectedCategoryKey): Subcategory[] => {
+        const selectedCategory = categoriesData[selectedCategoryKey];
+        const query = searchQuery.toLowerCase();
+
+        if (!categoriesData || !selectedCategoryKey) return [];
+
+        if (!selectedCategory || !selectedCategory.subcategories) return [];
+
+        if (!searchQuery || searchQuery.trim() === "") {
+            return selectedCategory.subcategories;
+        }
+
+
+        return selectedCategory.subcategories.filter((sub) => {
+            if (sub.name?.toLowerCase().includes(query)) return true;
+
+            if (Array.isArray(sub.description)) {
+                return sub.description.some((desc) =>
+                    desc?.name?.toLowerCase()?.includes(query)
+                );
+            }
+
+            if (typeof sub.description === 'string') {
+                return sub.description.toLowerCase().includes(query);
+            }
+
+            return false;
+        });
+    }
+);
 //
 // export const selectFilteredItems = createSelector(
 //     [selectSearchQuery, selectSelectedSubcategory],

@@ -40,9 +40,6 @@ export default function Index() {
         );
     }
 
-    console.log('categoriesData:', categoriesData);
-    console.log('filteredCategories:', filteredCategories);
-
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>

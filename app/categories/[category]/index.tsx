@@ -1,33 +1,31 @@
-import React, { useMemo, useState } from "react";
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Image} from "react-native";
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchQuery, setSelectedCategory } from '@/store/filters/filters-slice';
+import { selectFilteredSubcategories, selectSelectedCategory } from '@/store/filters/filters-selectors';
+import { View, Text, ScrollView, StyleSheet, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { categoriesData, Category, Subcategory } from "@/data/categoriesData";
+import { Subcategory } from "@/data/categoriesData";
 import SubcategoryList from "@/components/forCategory/SubcategoryList";
 
 export default function CategoryPage() {
-    const [expandedSubcategories, setExpandedSubcategories] = useState<{ [key: string]: boolean }>({});
-    const [searchQuery, setSearchQuery] = useState<string>("");
-    const { category } = useLocalSearchParams();
+    const dispatch = useDispatch();
     const router = useRouter();
+    const { category } = useLocalSearchParams();
+    const selectedCategory = useSelector(selectSelectedCategory);
+    const filteredSubcategories = useSelector(selectFilteredSubcategories);
+    const [expandedSubcategories, setExpandedSubcategories] = useState<{ [key: string]: boolean }>({});
 
-    const categoryKey = Array.isArray(category) ? category[0] : category;
-    const selectedCategory: Category | undefined = categoryKey ? categoriesData[categoryKey] : undefined;
+    const handleSearchChange = (text: string) => {
+        dispatch(setSearchQuery(text));
+    };
 
-    const filteredSubcategories = useMemo(() => {
-        if (!selectedCategory) return [];
-
-        const subcategories = selectedCategory.subcategories || [];
-        if (!searchQuery) return subcategories;
-
-        const query = searchQuery.toLowerCase();
-        return subcategories.filter(sub =>
-            sub.name.toLowerCase().includes(query) ||
-            (Array.isArray(sub.description)
-                ? sub.description.some(desc => desc?.name                                          .toLowerCase().includes(query))
-                : sub.description?.name?.toLowerCase()?.includes(query))
-        );
-    }, [searchQuery, selectedCategory]);
+    useEffect(() => {
+        const categoryKey = Array.isArray(category) ? category[0] : category;
+        if (categoryKey && typeof categoryKey === 'string') {
+            dispatch(setSelectedCategory(categoryKey));
+        }
+    }, [category, dispatch]);
 
     const toggleSubcategory = (id: string) => {
         setExpandedSubcategories((prev) => ({
@@ -56,8 +54,7 @@ export default function CategoryPage() {
                         <TextInput
                             style={styles.searchInput}
                             placeholder="Поиск"
-                            value={searchQuery}
-                            onChangeText={setSearchQuery}
+                            onChangeText={handleSearchChange}
                         />
                     </View>
                     <View style={styles.categoriesContainer}>
