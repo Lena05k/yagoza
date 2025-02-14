@@ -16,16 +16,24 @@ export default function CategoryPage() {
     const filteredSubcategories = useSelector(selectFilteredSubcategories);
     const [expandedSubcategories, setExpandedSubcategories] = useState<{ [key: string]: boolean }>({});
 
-    const handleSearchChange = (text: string) => {
-        dispatch(setSearchQuery(text));
-    };
-
     useEffect(() => {
         const categoryKey = Array.isArray(category) ? category[0] : category;
         if (categoryKey && typeof categoryKey === 'string') {
-            dispatch(setSelectedCategory(categoryKey));
+            try {
+                dispatch(setSelectedCategory(categoryKey));
+            } catch (error) {
+                console.error('Ошибка при установке категории:', error);
+            }
         }
     }, [category, dispatch]);
+
+    const handleSearchChange = (text: string) => {
+        try {
+            dispatch(setSearchQuery(text));
+        } catch (error) {
+            console.error('Ошибка при изменении поискового запроса:', error);
+        }
+    };
 
     const toggleSubcategory = (id: string) => {
         setExpandedSubcategories((prev) => ({
@@ -68,10 +76,12 @@ export default function CategoryPage() {
                                         isExpanded={expandedSubcategories[sub.id]}
                                         toggleCategory={() => toggleSubcategory(sub.id)}
                                         onPress={() => {
-                                            if (category && sub.id) {
-                                                router.push(`/categories/${category}/${sub.id}`);
-                                            } else {
-                                                console.error("Ошибка: недостаточно данных для перехода");
+                                            try {
+                                                if (category && sub.id) {
+                                                    router.push(`/categories/${category}/${sub.id}`);
+                                                }
+                                            } catch (error) {
+                                                console.error("Ошибка при переходе:", error);
                                             }
                                         }}
                                     />

@@ -1,29 +1,45 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchQuery, setSelectedCategory, setSelectedSubcategory } from '@/store/filters/filters-slice';
+import { selectFilteredItems, selectSelectedSubcategory } from '@/store/filters/filters-selectors';
 import { View, Text, ScrollView, StyleSheet, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { categoriesData } from "@/data/categoriesData";
 import ItemList from "@/components/forCategory/itemList";
 
 export default function CategoryPage() {
-    const [searchQuery, setSearchQuery] = useState<string>("");
-    const { category, subcategory } = useLocalSearchParams();
     const router = useRouter();
+    const dispatch = useDispatch();
+    const { category, subcategory } = useLocalSearchParams();
+    const selectedCategory = useSelector(selectSelectedSubcategory);
+    const filteredItems = useSelector(selectFilteredItems);
 
-    const selectedCategory = categoriesData[category as string];
-    const selectedSubcategory = selectedCategory?.subcategories.find(sub => sub.id === subcategory);
+    useEffect(() => {
+        if (category) {
+            try {
+                dispatch(setSelectedCategory(category as string));
+            } catch (error) {
+                console.error('Ошибка при установке категории:', error);
+            }
+        }
+        if (subcategory) {
+            try {
+                dispatch(setSelectedSubcategory(subcategory as string));
+            } catch (error) {
+                console.error('Ошибка при установке подкатегории:', error);
+            }
+        }
+    }, [category, subcategory, dispatch]);
 
-    const filteredItems = useMemo(() => {
-        if (!selectedSubcategory || !Array.isArray(selectedSubcategory.description)) return [];
-        if (!searchQuery) return selectedSubcategory.description;
+    const handleSearchChange = (text: string) => {
+        try {
+            dispatch(setSearchQuery(text));
+        } catch (error) {
+            console.error('Ошибка при изменении поискового запроса:', error);
+        }
+    };
 
-        const query = searchQuery.toLowerCase();
-        return selectedSubcategory.description.filter(desc =>
-            desc.name.toLowerCase().includes(query)
-        );
-    }, [searchQuery, selectedSubcategory]);
-
-    if (!selectedSubcategory) {
+    if (!selectedCategory) {
         return (
             <SafeAreaView style={styles.container}>
                 <Text style={styles.errorText}>Подкатегория не найдена</Text>
@@ -36,14 +52,13 @@ export default function CategoryPage() {
             <ScrollView>
                 <View style={styles.innerContainer}>
                     <View style={styles.headerContainer}>
-                        <Text style={styles.headerTitle}>{selectedSubcategory?.name}</Text>
+                        <Text style={styles.headerTitle}>{selectedCategory?.name}</Text>
                     </View>
                     <View style={styles.searchContainer}>
                         <TextInput
                             style={styles.searchInput}
                             placeholder="Поиск"
-                            value={searchQuery}
-                            onChangeText={setSearchQuery}
+                            onChangeText={handleSearchChange}
                         />
                     </View>
                     <View style={styles.categoriesContainer}>

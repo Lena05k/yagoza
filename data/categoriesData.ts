@@ -21,7 +21,7 @@ export interface Subcategory {
     id: string;
     img: ImageSourcePropType;
     name: string;
-    description?: Ingredient[];
+    description: Ingredient[];
 }
 
 export interface Category {

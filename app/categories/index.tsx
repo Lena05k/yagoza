@@ -16,11 +16,19 @@ export default function Index() {
     const filteredCategories = useSelector(selectFilteredCategories);
 
     useEffect(() => {
-        dispatch(setCategoriesData(categoriesData));
-    }, [dispatch])
+        try {
+            dispatch(setCategoriesData(categoriesData));
+        } catch (error) {
+            console.error('Ошибка при установке данных категорий:', error);
+        }
+    }, [dispatch]);
 
     const handleSearchChange = (text: string) => {
-        dispatch(setSearchQuery(text));
+        try {
+            dispatch(setSearchQuery(text));
+        } catch (error) {
+            console.error('Ошибка при изменении поискового запроса:', error);
+        }
     };
 
     const toggleCategory = (key: string) => {
@@ -65,8 +73,12 @@ export default function Index() {
                                 isExpanded={expandedCategories[key]}
                                 toggleCategory={() => toggleCategory(key)}
                                 onPress={() => {
-                                    if (key !== "viewAll") {
-                                        router.push(`/categories/${key}`);
+                                    try {
+                                        if (key !== "viewAll") {
+                                            router.push(`/categories/${key}`);
+                                        }
+                                    } catch (error) {
+                                        console.error('Ошибка при переходе между категориями:', error);
                                     }
                                 }}
                             />

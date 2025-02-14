@@ -28,10 +28,16 @@ export default function Index() {
                                     <TouchableOpacity
                                         key={key}
                                         style={styles.categoryItem}
-                                        onPress={() =>
-                                            key === "viewAll"
-                                                ? router.push("/categories")
-                                                : router.push(`/categories/${key}`)
+                                        onPress={() => {
+                                            try {
+                                                key === "viewAll"
+                                                    ? router.push("/categories")
+                                                    : router.push(`/categories/${key}`)
+                                            } catch (error) {
+                                                console.error('Ошибка при переходе на категорию:', error);
+                                            }
+                                        }
+
                                         }
                                     >
                                         <View>
