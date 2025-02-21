@@ -70,6 +70,7 @@ export const selectSelectedCategory = createSelector(
     [selectCategoriesData, selectSelectedCategoryKey],
     (categoriesData, selectedCategoryKey): Category | undefined => {
         if (!categoriesData || !selectedCategoryKey) return undefined;
+
         return categoriesData[selectedCategoryKey];
     }
 );

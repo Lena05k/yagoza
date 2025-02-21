@@ -6,7 +6,7 @@ interface CategoriesState {
 }
 
 const initialState: CategoriesState = {
-    data: {}, // Initialize with an empty object
+    data: {},
 };
 
 export const categoriesSlice = createSlice({

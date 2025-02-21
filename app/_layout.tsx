@@ -1,7 +1,8 @@
 import { Tabs } from "expo-router";
-import { Provider } from "react-redux";
+import {Provider} from "react-redux";
 import CustomIcon from "@/components/IconLibrary";
-import { store } from "@/store/store";
+import {store} from "@/store/store";
+
 
 export default function Layout() {
     return (
@@ -25,7 +26,8 @@ export default function Layout() {
                     name="index"
                     options={{
                         title: "Главная",
-                        tabBarIcon: ({ color, size, focused }) => <CustomIcon name="home" color={focused ? "black" : "#8E8E93"} size={size} />,
+                        tabBarIcon: ({ color, size, focused }) =>
+                            <CustomIcon name="home" color={focused ? "black" : "#8E8E93"} size={size} />,
                     }}
                 />
 
@@ -33,7 +35,8 @@ export default function Layout() {
                     name="categories"
                     options={{
                         title: "Категории",
-                        tabBarIcon: ({ color, size, focused }) => <CustomIcon name="list" color={focused ? "black" : "#8E8E93"} size={size} />,
+                        tabBarIcon: ({ color, size, focused }) =>
+                            <CustomIcon name="list" color={focused ? "black" : "#8E8E93"} size={size} />,
                     }}
                 />
                 {/*<Tabs.Screen*/}

@@ -1,4 +1,3 @@
-// store/index.ts
 import { configureStore } from '@reduxjs/toolkit';
 import filtersReducer from './filters/filters-slice';
 import categoriesReducer from './categories/categories-slice';

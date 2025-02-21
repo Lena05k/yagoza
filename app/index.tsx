@@ -1,18 +1,28 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import { Provider } from "react-redux";
+import {Provider, useSelector, useDispatch} from "react-redux";
 import {SafeAreaView} from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { categoriesData } from "@/data/categoriesData";
+import {selectFilteredCategories} from "@/store/filters/filters-selectors";
+import {setCategoriesData} from "@/store/categories/categories-slice";
 
 export default function Index() {
     const router = useRouter();
-
-    const categoryEntries = Object.entries(categoriesData);
+    const dispatch = useDispatch();
+    const categoryEntries = useSelector(selectFilteredCategories);
     const groupedCategories = [];
     for (let i = 0; i < categoryEntries.length; i += 2) {
         groupedCategories.push(categoryEntries.slice(i, i + 2));
     }
+
+    useEffect(() => {
+        try {
+            dispatch(setCategoriesData(categoriesData));
+        } catch (error) {
+            console.error('Ошибка при установке данных категорий:', error);
+        }
+    }, [dispatch]);
 
     return (
         <SafeAreaView style={styles.container}>
